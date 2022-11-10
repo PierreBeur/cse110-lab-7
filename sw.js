@@ -13,9 +13,9 @@ const RECIPE_URLS = [
 ];
 
 // Installs the service worker. Feed it some initial URLs to cache
-self.addEventListener('install', function (event) {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function (cache) {
+    caches.open(CACHE_NAME).then((cache) => {
       // All of the URLs from RECIPE_URLs are added to the cache when the ServiceWorker is installed
       return cache.addAll(RECIPE_URLS);
     })
@@ -23,12 +23,12 @@ self.addEventListener('install', function (event) {
 });
 
 // Activates the service worker
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
 // Intercept fetch requests and cache them
-self.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', async (event) => {
   // Respond to the event by opening the cache using the name we gave above (CACHE_NAME)
   event.respondWith(caches.open(CACHE_NAME).then((cache) => {
     return cache.match(event.request).then((cachedResponse) => {
