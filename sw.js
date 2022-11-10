@@ -32,13 +32,8 @@ self.addEventListener('fetch', async (event) => {
   // Respond to the event by opening the cache using the name we gave above (CACHE_NAME)
   event.respondWith(caches.open(CACHE_NAME).then((cache) => {
     return cache.match(event.request).then((cachedResponse) => {
-      // If the request is in the cache
-      if (cachedResponse) {
-        // Return with the cached version
-        return cachedResponse;
-      }
-      // Otherwise fetch the resource
-      return fetch(event.request).then((fetchedResponse) => {
+      // If the request is in the cache, return with the cached version, otherwise fetch the resource
+      return cachedResponse || fetch(event.request).then((fetchedResponse) => {
         // Add it to the cache
         cache.put(event.request, fetchedResponse.clone());
         // And return network response
